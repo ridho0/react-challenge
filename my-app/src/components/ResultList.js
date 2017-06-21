@@ -1,11 +1,17 @@
 import React from 'react'
 
+const inlineStyles = {
+  list: {
+    fontSize: 25,
+    listStyleType: 'none'
+  }
+}
+
 export default (props) => (
   <ul>
     { props.starships.map(item => {
-      {console.log(item);}
       return (
-        <li key={item.mglt}>{item.name}</li>
+        <li key={item.model} style={inlineStyles.list}>{item.name}</li>
       )
     }) }
   </ul>

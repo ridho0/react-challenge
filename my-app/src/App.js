@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Axios from 'axios'
 
-import logo from './logo.svg';
 import './App.css';
 import Content from './components/Content'
+import Welcome from './components/Welcome'
 
 class App extends Component {
 
@@ -24,7 +25,6 @@ class App extends Component {
   }
 
   componentWillMount(){
-    console.log("will mount")
     let next = ''
     Axios.get('http://swapi.co/api/starships')
       .then((response) => {
@@ -42,13 +42,18 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to Star space</h2>
+      <BrowserRouter>
+        <div className="App">
+
+          <Switch>
+            <Route exact path="/" component={Welcome} />
+            <Route path="/content"
+              component={ () => <Content starships={this.state.starships} /> }
+              />
+          </Switch>
+
         </div>
-        <Content starships={this.state.starships} />
-      </div>
+      </BrowserRouter>
     );
   }
 }
