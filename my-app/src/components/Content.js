@@ -1,37 +1,51 @@
 import React from 'react'
 import { Pagination } from 'react-materialize'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
+import { changeNameAction, searchAction } from '../actions'
 import ResultList from './ResultList'
 
-class Content extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      input: ''
-    }
-  }
+const Content = (props) => {
+  console.log('props.name',props.name);
 
-  render() {
-    return (
-      <div>
-        <div className='container'>
-          <h2>search here : </h2>
-          <form>
-            <input></input>
-          </form>
+  return (
+    <div>
+      <div className='container'>
+        <h2>search here : </h2>
+        <div>
+          <input
+            type="text"
+            placeholder="search here ..."
+            onChange={ event => props.changeName(event.target.value)}
+          />
+          <button onClick={ event => props.newSearch(props.name) }>search</button>
         </div>
-        <Link to="/">
-          <button>
-            Back
-          </button>
-        </Link>
-        <h1>this is the list of star ships</h1>
-        <ResultList starships={this.props.starships}/>
-        <Pagination items={10} activePage={1} maxButtons={8}/>
       </div>
-    )
+      <Link to="/">
+        <button>
+          Back
+        </button>
+      </Link>
+      <h3>This is The Result for { props.name }</h3>
+      <ResultList starships={props.search}/>
+      <Pagination items={10} activePage={1} maxButtons={8}/>
+    </div>
+  )
+}
+
+const mapStateToProps = (state) => {
+  return {
+    name: state.name.name,
+    search: state.search.starships
+  };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeName: (newName) => dispatch(changeNameAction(newName)),
+    newSearch: (newSearch) => dispatch(searchAction(newSearch))
   }
 }
 
-export default Content
+export default connect(mapStateToProps,mapDispatchToProps)(Content)
